@@ -125,6 +125,7 @@ export default {
 
 <style scoped>
 .register{
-  margin: 20px auto;
+  margin: 200px auto;
+  height: 700px;
 }
 </style>

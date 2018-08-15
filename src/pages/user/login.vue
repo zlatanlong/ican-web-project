@@ -59,7 +59,7 @@ export default {
               this.$Message.error('密码错误!')
             } else {
               this.$Message.success('登录成功!')
-              Store.saveLoged(this.formInline.user)
+              Store.setIfLoginAction(this.formInline.user)
               this.$router.push('/')
             }
           }, err => {

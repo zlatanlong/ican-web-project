@@ -1,6 +1,6 @@
 <template>
   <div class="nav-main">
-    <Menu mode="horizontal" :theme="theme1" active-name="1">
+    <Menu mode="horizontal" :theme="theme1" active-name="1" @on-select="logOut">
       <div class="items-right">
         <MenuItem name="1" to="/">
           <svg class="icon icon-shouye" aria-hidden="true">
@@ -19,15 +19,19 @@
             <svg class="icon icon-gerenxinxiyebaobeixingming" aria-hidden="true">
               <use xlink:href="#icon-gerenxinxiyebaobeixingming"></use>
             </svg>
-            {{user}}
+            {{sharedState.user}}
           </template>
-          <MenuGroup title="个人">
+          <MenuGroup title="个人" v-if="sharedState.ifLogin">
             <MenuItem name="3-1">个人信息</MenuItem>
             <MenuItem name="3-2">烹饪记录</MenuItem>
           </MenuGroup>
-          <MenuGroup title="账号">
+          <MenuGroup title="账号" v-if="sharedState.ifLogin">
             <MenuItem name="3-3">修改密码</MenuItem>
             <MenuItem name="3-4">注销</MenuItem>
+          </MenuGroup>
+          <MenuGroup title="请登录" v-if="!sharedState.ifLogin">
+            <MenuItem name="3-5">登录</MenuItem>
+            <MenuItem name="3-6">注册</MenuItem>
           </MenuGroup>
         </Submenu>
       </div>
@@ -48,13 +52,20 @@ export default {
   data () {
     return {
       theme1: 'light',
-      ifLogin: '',
-      user: '登录'
+      sharedState: Store.state
     }
   },
-  created () {
-    this.ifLogin = Store.fetchLogin() !== ''
-    this.user = Store.fetchLogin()
+  methods: {
+    logOut (name) {
+      if (name === '3-4') {
+        Store.clearIfLoginAction()
+        this.$router.push('/')
+      } else if (name === '3-5') {
+        this.$router.push('/login')
+      } else if (name === '3-6') {
+        this.$router.push('/register')
+      }
+    }
   }
 }
 </script>
@@ -70,16 +81,29 @@ export default {
     float: right;
     .ivu-menu-item{
       font-size 20px
+      @media screen and (max-width: 768px){
+        font-size 16px
+      }
     }
     .ivu-menu-submenu{
       font-size 20px
+      @media screen and (max-width: 768px){
+        font-size 16px
+      }
     }
   }
   .items-left{
-    float: left;
     @media screen and (max-width: 768px){
       // 小屏直接隐藏掉
       display none
+    }
+    float: left;
+    .icon {
+      width: 26px;
+      height: 26px;
+    }
+    .ivu-menu-item{
+      font-size 24px
     }
   }
 }
