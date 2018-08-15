@@ -5,6 +5,7 @@
       <router-view/>
     </div>
     <Foot></Foot>
+    <BackTop></BackTop>
   </div>
 </template>
 

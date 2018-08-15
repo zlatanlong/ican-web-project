@@ -1,7 +1,7 @@
 <template>
 <div class="home">
   <Row type="flex" justify="center" class="code-row-bg" align="middle">
-    <Col :xs="22" :sm="8" :md="7" :lg="6">
+    <Col :xs="11" :sm="8" :md="7" :lg="6">
       <div class="first-col">
         <h1>想吃海鲜要几步？</h1>
         <br>
@@ -28,13 +28,13 @@
             <p class="content">品尝美味</p>
           </TimelineItem>
         </Timeline>
-        <Tag checkable color="primary">标签一</Tag>
-        <Tag checkable color="success">标签二</Tag>
-        <Tag checkable color="error">标签三</Tag>
-        <Tag checkable color="warning">标签四</Tag>
+        <Tag checkable color="primary"><span>快</span></Tag>
+        <Tag checkable color="success"><span>香</span></Tag>
+        <Tag checkable color="error"><span>易</span></Tag>
+        <Tag checkable color="warning"><span>省</span></Tag>
       </div>
     </Col>
-    <Col :xs="0" :sm="8" :md="7" :lg="6">
+    <Col :xs="11" :sm="8" :md="7" :lg="6">
       <div class="second-col">
         <img src="@/assets/ican-logo.jpg" alt="" class="img-logo">
       </div>
@@ -54,14 +54,34 @@ export default {
 <style lang="stylus" scoped>
 .home{
   .first-col{
+    @media screen and (max-width: 768px){
+      font-size 12px
+    }
+    font-size 16px
     .time{
+      @media screen and (max-width: 768px){
+        font-size 18px
+      }
       font-size 24px
     }
     .content{
+      @media screen and (max-width: 768px){
+        font-size 22px
+      }
       font-size 30px
       span{
+        @media screen and (max-width: 768px){
+          font-size 22px
+        }
         color #fa7c21
+        font-size 30px
       }
+    }
+    span{
+      @media screen and (max-width: 768px){
+        font-size 14px
+      }
+      font-size 20px
     }
   }
   .second-col{
