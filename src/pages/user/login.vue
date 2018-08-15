@@ -44,7 +44,7 @@ export default {
     }
   },
   created () { // 在数据被初始化后会调用，this指向的是vm实例，钩子函数
-    this.$http.get('./test.json').then(res => { // success
+    this.$http.get('/api/login').then(res => { // success
       console.log(res.data)
     }, err => { // error
       console.log('失败')

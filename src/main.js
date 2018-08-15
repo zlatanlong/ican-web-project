@@ -9,10 +9,17 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 
 Vue.use(VueAxios, axios)
-
 Vue.use(iView)
 
+require('./mock.js')// 模拟数据
+
 Vue.config.productionTip = false
+
+router.beforeEach(function (to, from, next) {
+  // 路由层面控制访问
+  var loggedIn = true
+  if (loggedIn) { next() }
+})
 
 /* eslint-disable no-new */
 new Vue({
