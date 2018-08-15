@@ -1,43 +1,86 @@
 <template>
-  <div>
+  <div class="nav-main">
     <Menu mode="horizontal" :theme="theme1" active-name="1">
-      <MenuItem name="1">
-        <Icon type="ios-paper"/>
-        内容管理
-      </MenuItem>
-      <MenuItem name="2">
-        <Icon type="ios-people"/>
-        用户管理
-      </MenuItem>
-      <Submenu name="3">
-        <template slot="title">
-          <Icon type="ios-stats"/>
-          统计分析
-        </template>
-        <MenuGroup title="使用">
-          <MenuItem name="3-1">新增和启动</MenuItem>
-          `
-          <MenuItem name="3-2">活跃分析</MenuItem>
-          <MenuItem name="3-3">时段分析</MenuItem>
-        </MenuGroup>
-        <MenuGroup title="留存">
-          <MenuItem name="3-4">用户留存</MenuItem>
-          <MenuItem name="3-5">流失用户</MenuItem>
-        </MenuGroup>
-      </Submenu>
-      <MenuItem name="4">
-        <Icon type="ios-construct"/>
-        综合设置
-      </MenuItem>
+      <div class="items-right">
+        <MenuItem name="1" to="/">
+          <svg class="icon icon-shouye" aria-hidden="true">
+            <use xlink:href="#icon-shouye"></use>
+          </svg>
+          首页
+        </MenuItem>
+        <MenuItem name="2" to="/login">
+          <svg class="icon icon-guo" aria-hidden="true">
+            <use xlink:href="#icon-guo"></use>
+          </svg>
+          开煮
+        </MenuItem>
+        <Submenu name="3">
+          <template slot="title">
+            <svg class="icon icon-gerenxinxiyebaobeixingming" aria-hidden="true">
+              <use xlink:href="#icon-gerenxinxiyebaobeixingming"></use>
+            </svg>
+            {{user}}
+          </template>
+          <MenuGroup title="个人">
+            <MenuItem name="3-1">个人信息</MenuItem>
+            <MenuItem name="3-2">烹饪记录</MenuItem>
+          </MenuGroup>
+          <MenuGroup title="账号">
+            <MenuItem name="3-3">修改密码</MenuItem>
+            <MenuItem name="3-4">注销</MenuItem>
+          </MenuGroup>
+        </Submenu>
+      </div>
+      <div class="items-left">
+        <MenuItem name="4" to="/">
+          <svg class="icon icon-longxia" aria-hidden="true">
+            <use xlink:href="#icon-longxia"></use>
+          </svg>
+          我爱煮锅
+        </MenuItem>
+      </div>
     </Menu>
   </div>
 </template>
 <script>
+import Store from '@/store.js'
 export default {
   data () {
     return {
-      theme1: 'light'
+      theme1: 'light',
+      ifLogin: '',
+      user: '登录'
     }
+  },
+  created () {
+    this.ifLogin = Store.fetchLogin() !== ''
+    this.user = Store.fetchLogin()
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.nav-main{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  .items-right{
+    float: right;
+    .ivu-menu-item{
+      font-size 20px
+    }
+    .ivu-menu-submenu{
+      font-size 20px
+    }
+  }
+  .items-left{
+    float: left;
+    @media screen and (max-width: 768px){
+      // 小屏直接隐藏掉
+      display none
+    }
+  }
+}
+</style>
