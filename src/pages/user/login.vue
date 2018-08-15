@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Store from '@/store.js'
 export default {
   name: 'login',
   data () {
@@ -43,19 +44,28 @@ export default {
       }
     }
   },
-  created () { // 在数据被初始化后会调用，this指向的是vm实例，钩子函数
-    this.$http.get('/api/login').then(res => { // success
-      console.log(res.data)
-    }, err => { // error
-      console.log('失败')
-      console.log(err)
-    })
-  },
   methods: {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('登录成功!')
+          this.$http.get('/api/login', {
+            username: this.formInline.user,
+            password: this.formInline.password
+          }).then(res => {
+            if (!res.data.hasUser) {
+              console.log(res.data.hasUser)
+              this.$Message.error('用户名错误!')
+            } else if (!res.data.passWordMatched) {
+              this.$Message.error('密码错误!')
+            } else {
+              this.$Message.success('登录成功!')
+              Store.saveLoged(this.formInline.user)
+              this.$router.push('/')
+            }
+          }, err => {
+            console.log(err)
+            this.$Message.error('服务器连接失败!')
+          })
         } else {
           this.$Message.error('登录失败!')
         }
