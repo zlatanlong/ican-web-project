@@ -15,8 +15,9 @@
           <Input type="text" v-model="formCustom.age" number size="large"></Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('formCustom')">Submit</Button>
-          <Button @click="handleReset('formCustom')" style="margin-left: 8px">Reset</Button>
+          <Button type="primary" @click="handleSubmit('formCustom')">提交</Button>
+          <Button @click="handleReset('formCustom')" style="margin-left: 8px">重填</Button>
+          <Button @click="toLogin" style="margin-right: 3%;float: right">直接登录</Button>
         </FormItem>
       </Form>
     </Col>
@@ -91,9 +92,11 @@ export default {
       },
       ruleCustom: {
         user: [
+          { type: 'string', min: 4, message: '请起个长一点的名字', trigger: 'blur' },
           { validator: validateUser, trigger: 'blur' }
         ],
         passwd: [
+          { type: 'string', min: 6, message: '密码不会少于6位', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
         passwdCheck: [
@@ -118,6 +121,9 @@ export default {
     },
     handleReset (name) {
       this.$refs[name].resetFields()
+    },
+    toLogin () {
+      this.$router.push('/login')
     }
   }
 }
@@ -125,7 +131,6 @@ export default {
 
 <style scoped>
 .register{
-  margin: 200px auto;
   height: 700px;
 }
 </style>

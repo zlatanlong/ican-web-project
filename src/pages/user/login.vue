@@ -16,7 +16,8 @@
           </Input>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+          <Button type="primary" @click="handleSubmit('formInline')" style="margin-left: 4%">登录</Button>
+          <Button @click="toRegister" style="float: right;margin-right: 4%">前去注册</Button>
         </FormItem>
       </Form>
     </Col>
@@ -70,6 +71,9 @@ export default {
           this.$Message.error('登录失败!')
         }
       })
+    },
+    toRegister () {
+      this.$router.push('/register')
     }
   }
 }

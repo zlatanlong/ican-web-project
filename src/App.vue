@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Nav></Nav>
-    <router-view/>
+    <div class="router">
+      <router-view/>
+    </div>
     <Foot></Foot>
   </div>
 </template>
@@ -25,5 +27,8 @@ export default {
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;
+  }
+  .router{
+    margin: 100px auto;
   }
 </style>
