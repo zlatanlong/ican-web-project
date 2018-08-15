@@ -69,11 +69,23 @@ module.exports = {
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-        }
+        // loader: 'url-loader',
+        // options: {
+        //   limit: 10000,
+        //   name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+        // }
+        loaders: [
+          {
+            loader: path.resolve(__dirname, 'cssPathResolver')
+          },
+          {
+            loader: 'url-loader',
+            query: {
+              limit: 10000,
+              name: utils.assetsPath('icons/[name].[hash:7].[ext]'),
+            }
+          }
+        ]
       }
     ]
   },
