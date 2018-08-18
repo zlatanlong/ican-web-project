@@ -49,12 +49,15 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$http.get('/api/login', {
-            username: this.formInline.user,
-            password: this.formInline.password
+          this.$http.get('http://www.upctx.cn:8080/api/LoginServlet', {
+            params: {
+              username: this.formInline.user,
+              password: this.formInline.password
+            }
           }).then(res => {
             if (!res.data.hasUser) {
               console.log(res.data.hasUser)
+              console.log(this.formInline.user)
               this.$Message.error('用户名错误!')
             } else if (!res.data.passWordMatched) {
               this.$Message.error('密码错误!')

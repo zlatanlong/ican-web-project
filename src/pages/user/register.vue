@@ -5,6 +5,9 @@
         <FormItem label="用户名" prop="user">
           <Input type="text" v-model="formCustom.user" size="large"></Input>
         </FormItem>
+        <FormItem label="手机号" prop="phoneNum">
+          <Input type="text" v-model="formCustom.phoneNum" size="large"></Input>
+        </FormItem>
         <FormItem label="密码" prop="passwd">
           <Input type="password" v-model="formCustom.passwd" size="large"></Input>
         </FormItem>
@@ -68,11 +71,33 @@ export default {
       if (value === '') {
         callback(new Error('用户名不能为空！'))
       } else {
-        this.$http.get('./validateUserName', {
-          user: this.formCustom.user
+        this.$http.get('http://www.upctx.cn:8080/api/RegisterServlet', {
+          params: {
+            username: this.formCustom.user
+          }
         }).then(res => {
           if (res.data.hasUser) {
             callback(new Error('用户名已被注册'))
+          } else {
+            callback()
+          }
+        }, err => {
+          callback(new Error('无法连接服务器'))
+          console.log(err)
+        })
+      }
+    }
+    const validatePhoneNum = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('手机号不能为空！'))
+      } else {
+        this.$http.get('http://www.upctx.cn:8080/api/RegisterServlet', {
+          params: {
+            phonenum: this.formCustom.phoneNum
+          }
+        }).then(res => {
+          if (res.data.hasPhone) {
+            callback(new Error('该手机号已被注册'))
           } else {
             callback()
           }
@@ -88,12 +113,17 @@ export default {
         passwd: '',
         passwdCheck: '',
         age: '',
-        user: ''
+        user: '',
+        phoneNum: ''
       },
       ruleCustom: {
         user: [
           { type: 'string', min: 4, message: '请起个长一点的名字', trigger: 'blur' },
           { validator: validateUser, trigger: 'blur' }
+        ],
+        phoneNum: [
+          { type: 'string', min: 11, max: 11, message: '请输入正确的手机号', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         passwd: [
           { type: 'string', min: 6, message: '密码不会少于6位', trigger: 'blur' },
@@ -112,8 +142,16 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('注册成功!')
-          this.$router.push('/login')
+          this.$http.post('http://www.upctx.cn:8080/api/RegisterServlet', {
+            username: this.formCustom.user,
+            password: this.formCustom.passwd,
+            phonenum: this.formCustom.phoneNum
+          }).then(res => {
+            this.$Message.success('注册成功!')
+            this.$router.push('/login')
+          }, err => {
+            console.log(err)
+          })
         } else {
           this.$Message.error('注册失败!')
         }

@@ -11,7 +11,7 @@ import 'iview/dist/styles/iview.css'
 Vue.use(VueAxios, axios)
 Vue.use(iView)
 
-require('./mock.js')// 模拟数据
+// require('./mock.js')// 模拟数据
 
 Vue.config.productionTip = false
 

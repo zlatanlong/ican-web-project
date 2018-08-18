@@ -10,7 +10,13 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
       component: resolve => require(['@/pages/home'], resolve)
+    },
+    {
+      path: '/Cook',
+      name: 'Cook',
+      component: resolve => require(['@/pages/goCook'], resolve)
     },
     {
       path: '/login',

@@ -8,7 +8,7 @@
           </svg>
           首页
         </MenuItem>
-        <MenuItem name="2" to="/login">
+        <MenuItem name="2" to="/Cook">
           <svg class="icon icon-guo" aria-hidden="true">
             <use xlink:href="#icon-guo"></use>
           </svg>

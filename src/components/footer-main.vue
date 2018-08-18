@@ -28,7 +28,7 @@ export default {
     font-size: 10px;
   }
   padding: 30px  0;
-  font-size: 16px;
+  font-size: 14px;
 }
 a {
   color: #515a6e;
