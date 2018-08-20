@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <Nav></Nav>
-    <div class="router">
+    <div class="router" v-if="showRou">
       <router-view/>
     </div>
-    <Foot></Foot>
-    <BackTop></BackTop>
+    <Foot v-if="showFoot"></Foot>
+    <BackTop v-if="showFoot"></BackTop>
   </div>
 </template>
 
@@ -17,6 +17,22 @@ export default {
   components: {
     Foot,
     Nav
+  },
+  data () {
+    return {
+      showRou: false,
+      showFoot: false
+    }
+  },
+  created () {
+    // 显示content
+    setTimeout(() => {
+      this.showRou = true
+    }, 0)
+    // 显示sidebar
+    setTimeout(() => {
+      this.showFoot = true
+    }, 0)
   }
 }
 </script>

@@ -6,16 +6,21 @@
           <Input type="text" v-model="formCustom.user" size="large"></Input>
         </FormItem>
         <FormItem label="手机号" prop="phoneNum">
-          <Input type="text" v-model="formCustom.phoneNum" size="large"></Input>
+          <Input type="text" v-model="formCustom.phoneNum" size="large">
+            <Button slot="append" @click="sendIdCode" :loading="formCustom.sendLoding">
+              <span v-if="!formCustom.sendLoding">发送验证码</span>
+              <span v-if="formCustom.sendLoding">已发送，请注意短信</span>
+            </Button>
+          </Input>
+        </FormItem>
+        <FormItem label="验证码" prop="idCode">
+          <Input type="text" v-model="formCustom.idCode" size="large"></Input>
         </FormItem>
         <FormItem label="密码" prop="passwd">
           <Input type="password" v-model="formCustom.passwd" size="large"></Input>
         </FormItem>
         <FormItem label="确认密码" prop="passwdCheck">
           <Input type="password" v-model="formCustom.passwdCheck" size="large"></Input>
-        </FormItem>
-        <FormItem label="年龄" prop="age">
-          <Input type="text" v-model="formCustom.age" number size="large"></Input>
         </FormItem>
         <FormItem>
           <Button type="primary" @click="handleSubmit('formCustom')">提交</Button>
@@ -50,22 +55,27 @@ export default {
         callback()
       }
     }
-    const validateAge = (rule, value, callback) => {
+    const validateIdCode = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('年龄不能为空！'))
+        return callback(new Error('验证码不能为空！'))
       }
       // 模拟异步验证效果
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error('请输入一个数字！'))
-        } else {
-          if (value < 18) {
-            callback(new Error('必须满18周岁！'))
-          } else {
-            callback()
-          }
-        }
-      }, 1000)
+      // setTimeout(() => {
+      //   if (!Number.isInteger(value)) {
+      //     callback(new Error('请输入一个数字！'))
+      //   } else {
+      //     if (value < 18) {
+      //       callback(new Error('必须满18周岁！'))
+      //     } else {
+      //       callback()
+      //     }
+      //   }
+      // }, 1000)
+      if (value !== this.formCustom.idCodeContent) {
+        return callback(new Error('验证码有误！'))
+      } else {
+        callback()
+      }
     }
     const validateUser = (rule, value, callback) => {
       if (value === '') {
@@ -97,8 +107,12 @@ export default {
           }
         }).then(res => {
           if (res.data.hasPhone) {
+            this.hasPhone = true
+            console.log('该手机号已被注册')
             callback(new Error('该手机号已被注册'))
           } else {
+            this.hasPhone = false
+            console.log('该手机号可以被注册')
             callback()
           }
         }, err => {
@@ -112,13 +126,15 @@ export default {
       formCustom: {
         passwd: '',
         passwdCheck: '',
-        age: '',
+        idCode: '',
         user: '',
-        phoneNum: ''
+        phoneNum: '',
+        idCodeContent: '', // 发送的验证码内容
+        sendLoding: false
       },
       ruleCustom: {
         user: [
-          { type: 'string', min: 4, message: '请起个长一点的名字', trigger: 'blur' },
+          { type: 'string', min: 2, message: '请起个长一点的名字', trigger: 'blur' },
           { validator: validateUser, trigger: 'blur' }
         ],
         phoneNum: [
@@ -132,8 +148,9 @@ export default {
         passwdCheck: [
           { validator: validatePassCheck, trigger: 'blur' }
         ],
-        age: [
-          { validator: validateAge, trigger: 'blur' }
+        idCode: [
+          { type: 'string', min: 4, max: 4, message: '请输入正确的验证码', trigger: 'blur' },
+          { validator: validateIdCode, trigger: 'blur' }
         ]
       }
     }
@@ -149,11 +166,13 @@ export default {
           }).then(res => {
             this.$Message.success('注册成功!')
             this.$router.push('/login')
+            this.$Loading.finish()
           }, err => {
             console.log(err)
           })
         } else {
           this.$Message.error('注册失败!')
+          this.$Loading.error()
         }
       })
     },
@@ -162,6 +181,31 @@ export default {
     },
     toLogin () {
       this.$router.push('/login')
+    },
+    sendIdCode () {
+      if (this.formCustom.phoneNum.length === 11 && !this.hasPhone) {
+        this.formCustom.sendLoding = true
+        this.$http.get('http://www.upctx.cn:8080/api/SendMsgServlet', {
+          params: {
+            phonenum: this.formCustom.phoneNum
+          }
+        }).then(res => {
+          console.log(res.data.stateCode)
+          if (res.data.stateCode === '0') {
+            this.formCustom.idCodeContent = res.data.idCode
+            this.$Message.success('验证码发送成功，请注意查收短信')
+          } else {
+            this.$Message.error('发送失败，请稍后再试')
+          }
+        }, err => {
+          console.log(err)
+        })
+      } else {
+        this.$Message.error('请输入正确的手机号')
+      }
+    },
+    hasPhone () {
+      return true
     }
   }
 }

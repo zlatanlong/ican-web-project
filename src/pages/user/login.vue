@@ -65,6 +65,7 @@ export default {
               this.$Message.success('登录成功!')
               Store.setIfLoginAction(this.formInline.user)
               this.$router.push('/')
+              this.$Loading.finish()
             }
           }, err => {
             console.log(err)
@@ -72,6 +73,7 @@ export default {
           })
         } else {
           this.$Message.error('登录失败!')
+          this.$Loading.error()
         }
       })
     },

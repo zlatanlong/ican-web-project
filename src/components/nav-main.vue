@@ -20,6 +20,7 @@
               <use xlink:href="#icon-gerenxinxiyebaobeixingming"></use>
             </svg>
             {{sharedState.user}}
+            <span v-if="!sharedState.ifLogin">请注册</span>
           </template>
           <MenuGroup title="个人" v-if="sharedState.ifLogin">
             <MenuItem name="3-1">个人信息</MenuItem>

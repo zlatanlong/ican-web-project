@@ -21,6 +21,15 @@ router.beforeEach(function (to, from, next) {
   if (loggedIn) { next() }
 })
 
+router.beforeEach((to, from, next) => {
+  iView.LoadingBar.start()
+  next()
+})
+
+router.afterEach(route => {
+  iView.LoadingBar.finish()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
