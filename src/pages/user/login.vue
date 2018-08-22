@@ -49,7 +49,7 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$http.get('http://www.upctx.cn:8080/api/LoginServlet', {
+          this.$http.get('https://www.upctx.cn:8443/api/LoginServlet', {
             params: {
               username: this.formInline.user,
               password: this.formInline.password

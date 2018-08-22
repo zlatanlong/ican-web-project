@@ -105,7 +105,6 @@ export default {
       return currentdate
     },
     handleSubmit (name) {
-      alert(this.formItem.sharedState.user)
       this.$refs[name].validate((valid) => {
         if (this.formItem.sharedState.ifLogin) {
           if (valid) {
@@ -123,7 +122,7 @@ export default {
                 ])
               }
             })
-            this.$http.post('http://www.upctx.cn:8080/api/CookServlet', {
+            this.$http.post('https://www.upctx.cn:8443/api/CookServlet', {
               subtime: this.getNowDate(),
               condiment: this.formItem.checkbox,
               username: this.formItem.sharedState.user,

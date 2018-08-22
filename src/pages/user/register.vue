@@ -7,7 +7,7 @@
         </FormItem>
         <FormItem label="手机号" prop="phoneNum">
           <Input type="text" v-model="formCustom.phoneNum" size="large">
-            <Button slot="append" @click="sendIdCode" :loading="formCustom.sendLoding">
+            <Button slot="append" @click="sendIdCode()" :loading="formCustom.sendLoding">
               <span v-if="!formCustom.sendLoding">发送验证码</span>
               <span v-if="formCustom.sendLoding">已发送，请注意短信</span>
             </Button>
@@ -59,18 +59,6 @@ export default {
       if (!value) {
         return callback(new Error('验证码不能为空！'))
       }
-      // 模拟异步验证效果
-      // setTimeout(() => {
-      //   if (!Number.isInteger(value)) {
-      //     callback(new Error('请输入一个数字！'))
-      //   } else {
-      //     if (value < 18) {
-      //       callback(new Error('必须满18周岁！'))
-      //     } else {
-      //       callback()
-      //     }
-      //   }
-      // }, 1000)
       if (value !== this.formCustom.idCodeContent) {
         return callback(new Error('验证码有误！'))
       } else {
@@ -81,7 +69,7 @@ export default {
       if (value === '') {
         callback(new Error('用户名不能为空！'))
       } else {
-        this.$http.get('http://www.upctx.cn:8080/api/RegisterServlet', {
+        this.$http.get('https://www.upctx.cn:8443/api/RegisterServlet', {
           params: {
             username: this.formCustom.user
           }
@@ -101,7 +89,7 @@ export default {
       if (value === '') {
         callback(new Error('手机号不能为空！'))
       } else {
-        this.$http.get('http://www.upctx.cn:8080/api/RegisterServlet', {
+        this.$http.get('https://www.upctx.cn:8443/api/RegisterServlet', {
           params: {
             phonenum: this.formCustom.phoneNum
           }
@@ -159,7 +147,7 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$http.post('http://www.upctx.cn:8080/api/RegisterServlet', {
+          this.$http.post('https://www.upctx.cn:8443/api/RegisterServlet', {
             username: this.formCustom.user,
             password: this.formCustom.passwd,
             phonenum: this.formCustom.phoneNum
@@ -185,7 +173,7 @@ export default {
     sendIdCode () {
       if (this.formCustom.phoneNum.length === 11 && !this.hasPhone) {
         this.formCustom.sendLoding = true
-        this.$http.get('http://www.upctx.cn:8080/api/SendMsgServlet', {
+        this.$http.get('https://www.upctx.cn:8443/api/SendMsgServlet', {
           params: {
             phonenum: this.formCustom.phoneNum
           }
