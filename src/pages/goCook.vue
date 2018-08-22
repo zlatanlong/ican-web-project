@@ -67,6 +67,12 @@ export default {
       }
     }
   },
+  created () {
+    if (!this.formItem.sharedState.ifLogin) {
+      this.$Message.error('请登录')
+      this.$router.push('/Login')
+    }
+  },
   methods: {
     getNowDate () {
       // 得到 YYYY-MM-DD HH:mm:SS
@@ -99,9 +105,10 @@ export default {
       return currentdate
     },
     handleSubmit (name) {
+      alert(this.formItem.sharedState.user)
       this.$refs[name].validate((valid) => {
-        if (valid) {
-          if (this.formItem.sharedState.user !== (null || '')) {
+        if (this.formItem.sharedState.ifLogin) {
+          if (valid) {
             this.$Spin.show({
               render: (h) => {
                 return h('div', [
@@ -116,7 +123,7 @@ export default {
                 ])
               }
             })
-            this.$http.post('http://localhost:8081/api/CookServlet', {
+            this.$http.post('http://www.upctx.cn:8080/api/CookServlet', {
               subtime: this.getNowDate(),
               condiment: this.formItem.checkbox,
               username: this.formItem.sharedState.user,
@@ -136,11 +143,11 @@ export default {
               console.log(err)
             })
           } else {
-            this.$Message.error('请登录！')
-            this.$router.push('/Login')
+            this.$Message.error('操作失败')
           }
         } else {
-          this.$Message.error('操作失败！')
+          this.$Message.error('请登录！')
+          this.$router.push('/Login')
           this.$Loading.error()
         }
       })
